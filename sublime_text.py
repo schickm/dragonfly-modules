@@ -26,6 +26,8 @@ class CommandRule(MappingRule):
         'ninth tab': Key('a-9'),
         'left column': Key('c-1'),
         'right column': Key('c-2'),
+        'go to file': Key('c-p'),
+        'toggle sidebar': Key('c-k, c-b')
     }
     extras = [
         IntegerRef('n', 1, 20),

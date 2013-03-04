@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 from dragonfly import (Grammar, AppContext, MappingRule, Key, IntegerRef,
@@ -7,6 +8,8 @@ from dragonfly import (Grammar, AppContext, MappingRule, Key, IntegerRef,
 import os, sys
 sys.path.append(os.path.dirname(__file__))
 from shared_rules import ScrollRule
+
+os.environ['PATH'] += os.pathsep + 'C:\\cygwin\\bin'
  
 
 class ShellCommand(ActionBase):
@@ -46,8 +49,10 @@ class EmacsCommand(ShellCommand):
     def format_command(self, command):
         formatted_command = '(' + command + ')'
         if self._message:
-            formatted_command = '(progn %s (message \\"%s\\"))' % (formatted_command, self._message)
+            formatted_command = '(progn %s (message "%s"))' % (formatted_command, self._message)
 
+        # Need to escape double quotes for the command line
+        formatted_command = formatted_command.replace('"', '\\"')
         return 'emacsclient.exe -e "%s"' % formatted_command
 
 
@@ -86,12 +91,14 @@ class CommandRule(MappingRule):
         "open file": Key("c-x, c-f"),
         "save": Key("c-x, c-s"), 
         'save all': EmacsCommand('save-some-buffers'),
+        'quit emacs': EmacsCommand('save-buffers-kill-terminal'),
+        'switch buff': EmacsCommand('ido-switch-buffer'),
         "kill buff": Key("c-x, k, enter"),
         "left win": EmacsCommand("windmove-left"),
         "right win": EmacsCommand("windmove-right"), 
         'up win': EmacsCommand('windmove-up'),
         'down win': EmacsCommand('windmove-down'),
-        'delete other win': EmacsCommand('delete-other-windows'),
+        'close other win': EmacsCommand('delete-other-windows'),
         'vertical split win': EmacsCommand('split-window-right'),
         'horizontal split win': EmacsCommand('split-window-below'),
         'move buff right': EmacsCommand('buf-move-right'),
@@ -103,6 +110,9 @@ class CommandRule(MappingRule):
         'untrace function': CompoundCommand('function-called-at-point', 
                                             EmacsCommand("untrace-function '{0}", 'untrace function {0}')),
         'untrace all': EmacsCommand('untrace-all', 'untrace all'), 
+        'find function': CompoundCommand('function-called-at-point',
+                                         EmacsCommand("find-function '{0}")),
+
     }
     extras = [
         IntegerRef('n', 1, 20),
@@ -113,9 +123,29 @@ class CommandRule(MappingRule):
 
 
 #---------------------------------------------------------------------------
- 
-context = AppContext(executable="emacs")
-grammar = Grammar("Emacs", context=context)
+# short talk redo
+
+short_talk_symbols = {
+    'per': '%',
+}
+
+short_talk_numerals = {
+    'ane': 1,
+    'oon': -1,
+    'twain': 2,
+    'twoon': -2
+}
+
+
+class SearchRule(CompoundCommand):
+    pass
+
+class DeleteRule(CompoundCommand):
+    spec = 'smack <'
+
+#---------------------------------------------------------------------------
+context = AppContext(executable="xwin")
+grammar = Grammar("Emacs Old", context=context)
 grammar.add_rule(CommandRule())
 grammar.add_rule(ScrollRule())
 grammar.load()

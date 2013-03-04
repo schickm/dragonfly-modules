@@ -88,6 +88,7 @@ class CommandRule(MappingRule):
         # Press escape to the blur focus on any input fields
         "click": Key("c-b"),
         "close tab": Key("c-w"),
+        'new window': Key('c-n'),
         "new tab": Key("c-t"),
         "next tab [<n>]": Key('c-pgdown:%(n)d'),
         'pre tab [<n>]': Key('c-pgup:%(n)d'),

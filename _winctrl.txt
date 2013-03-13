@@ -1,0 +1,12 @@
+#
+# Dragonfly config for Window control
+#
+
+#--- Language section ------------------------------------------------------
+
+
+
+settings.defaults = {'chrome': ('chrome', None),
+                     'max': ('xwin', 'emacs'),
+                     'macros': (None, 'C:\NatLink\NatLink\MacroSystem'),
+                     'site packages': (None, 'C:\Python26\Lib\site-packages')}

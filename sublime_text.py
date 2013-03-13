@@ -1,4 +1,4 @@
-from dragonfly import (Grammar, AppContext, MappingRule, Key, IntegerRef)
+from dragonfly import (Grammar, AppContext, MappingRule, Key, IntegerRef, Text, Dictation)
 
 # Use wacky method to import a local file
 import os, sys
@@ -27,10 +27,19 @@ class CommandRule(MappingRule):
         'left column': Key('c-1'),
         'right column': Key('c-2'),
         'go to file': Key('c-p'),
-        'toggle sidebar': Key('c-k, c-b')
+        'toggle sidebar': Key('c-k, c-b'),
+        'find <text>': Key('c-f') + Text('%(text)s\n'),
+        'find all <text>': Key('cs-f') + Text('%(text)s\n'),
+        'find next': Key('f3'),
+        'cancel': Key('escape'),
+        'single column': Key('as-1'),
+        'two column': Key('as-2'),
+        'go to line <bn>': Key('c-g') + Text('%(bn)s') + Key('enter'),
     }
     extras = [
         IntegerRef('n', 1, 20),
+        IntegerRef('bn', 1, 10000),
+        Dictation('text'),
     ]
     defaults = {
         'n': 1,

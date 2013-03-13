@@ -99,7 +99,7 @@ grammar = Grammar("window control")
 
 #---------------------------------------------------------------------------
 # Dictionary list of window and monitor names.
-
+ 
 win_names     = DictList("win_names")
 win_names_ref = DictListRef("win_names", win_names)
 mon_names     = DictList("mon_names")
@@ -297,6 +297,7 @@ position = RuleRef(position_rule, name="position")
 
 class TranslateRule(CompoundRule):
 
+    # place <win_selector> <position> [on <mon_selector>]
     spec = config.lang.translate_win
     extras = [
               win_selector,                  # Window selector element

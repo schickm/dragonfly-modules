@@ -102,6 +102,7 @@ class CommandRule(MappingRule):
         'eighth tab': Key('c-8'),
         'last tab': Key('c-9'),
         'bar': Key('c-l'),
+        'inspector': Key('cs-i'),
         'back [<n>]': Key('a-left:%(n)d'),
         'forward [<n>]': Key('a-right:%(n)d'),
         'search <text>': Key('c-k/4') + Text('%(text)s'),
